@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 
 const ACCESS_TOKEN_KEY = 'devcare_access_token'
+const ROLE_KEY = 'devcare_role'
 
 function getIsAuthenticated() {
   return Boolean(localStorage.getItem(ACCESS_TOKEN_KEY))
@@ -10,6 +11,7 @@ function getIsAuthenticated() {
 
 function Navbar() {
   const isAuthenticated = getIsAuthenticated()
+  const role = localStorage.getItem(ROLE_KEY)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
   const username = localStorage.getItem('devcare_username')
@@ -18,9 +20,18 @@ function Navbar() {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem('devcare_refresh_token')
     localStorage.removeItem('devcare_username')
+    localStorage.removeItem(ROLE_KEY)
     window.location.href = '/'
   }
 
+  const navItems = isAuthenticated
+    ? [
+        {
+          label: role === 'doctor' ? 'Doctor Dashboard' : 'Patient Dashboard',
+          href: role === 'doctor' ? '/dashboard/doctor' : '/dashboard/patient',
+        },
+      ]
+    : []
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event) {

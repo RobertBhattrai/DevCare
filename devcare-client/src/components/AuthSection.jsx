@@ -5,6 +5,7 @@ import { loginUser, registerUser } from '../api/authApi'
 const ACCESS_TOKEN_KEY = 'devcare_access_token'
 const REFRESH_TOKEN_KEY = 'devcare_refresh_token'
 const USERNAME_KEY = 'devcare_username'
+const ROLE_KEY = 'devcare_role'
 
 function AuthSection({ onAuthSuccess }) {
   const [mode, setMode] = useState('login')
@@ -14,14 +15,17 @@ function AuthSection({ onAuthSuccess }) {
   const [form, setForm] = useState({
     username: '',
     email: '',
+    role: 'patient',
     password: '',
     confirmPassword: '',
   })
 
-  function storeAuth(access, refresh, username) {
+  function storeAuth(access, refresh, username, role) {
+    const normalizedRole = (role || 'patient').toLowerCase()
     localStorage.setItem(ACCESS_TOKEN_KEY, access)
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
     localStorage.setItem(USERNAME_KEY, username)
+    localStorage.setItem(ROLE_KEY, normalizedRole)
   }
 
   function updateField(event) {
@@ -40,6 +44,7 @@ function AuthSection({ onAuthSuccess }) {
         const registerData = await registerUser({
           username: form.username,
           email: form.email,
+          role: form.role.toLowerCase(),
           password: form.password,
           password_confirm: form.confirmPassword,
         })
@@ -47,19 +52,22 @@ function AuthSection({ onAuthSuccess }) {
         storeAuth(
           registerData.access,
           registerData.refresh,
-          registerData.user.username
+          registerData.user.username,
+          registerData.user.role
         )
         setSuccess('Registration successful. Redirecting to dashboard...')
         setForm({
           username: '',
           email: '',
+          role: 'patient',
           password: '',
           confirmPassword: '',
         })
         onAuthSuccess?.(
           registerData.access,
           registerData.refresh,
-          registerData.user.username
+          registerData.user.username,
+          registerData.user.role
         )
       } else {
         const loginData = await loginUser({
@@ -67,15 +75,26 @@ function AuthSection({ onAuthSuccess }) {
           password: form.password,
         })
 
-        storeAuth(loginData.access, loginData.refresh, form.username)
+        storeAuth(
+          loginData.access,
+          loginData.refresh,
+          loginData.user?.username || form.username,
+          loginData.user?.role
+        )
         setSuccess('Login successful. Redirecting to dashboard...')
         setForm({
           username: '',
           email: '',
+          role: 'patient',
           password: '',
           confirmPassword: '',
         })
-        onAuthSuccess?.(loginData.access, loginData.refresh, form.username)
+        onAuthSuccess?.(
+          loginData.access,
+          loginData.refresh,
+          loginData.user?.username || form.username,
+          loginData.user?.role
+        )
       }
     } catch (submitError) {
       setError(submitError.message)
@@ -158,6 +177,21 @@ function AuthSection({ onAuthSuccess }) {
                       autoComplete="email"
                       required
                     />
+
+                    <label className="auth-label" htmlFor="role">
+                      Register as
+                    </label>
+                    <select
+                      id="role"
+                      name="role"
+                      value={form.role}
+                      onChange={updateField}
+                      className="auth-input"
+                      required
+                    >
+                      <option value="patient">Patient</option>
+                      <option value="doctor">Doctor</option>
+                    </select>
                   </>
                 )}
 

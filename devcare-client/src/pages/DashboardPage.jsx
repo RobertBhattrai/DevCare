@@ -1,25 +1,15 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
-import Footer from '../components/Footer'
-import Navbar from '../components/Navbar'
-
-const ACCESS_TOKEN_KEY = 'devcare_access_token'
-const REFRESH_TOKEN_KEY = 'devcare_refresh_token'
-const USERNAME_KEY = 'devcare_username'
+const ROLE_KEY = 'devcare_role'
 
 function DashboardPage() {
-  const navigate = useNavigate()
-  const username = localStorage.getItem(USERNAME_KEY)
-  const access = localStorage.getItem(ACCESS_TOKEN_KEY)
-  const refresh = localStorage.getItem(REFRESH_TOKEN_KEY)
+  const role = (localStorage.getItem(ROLE_KEY) || 'patient').toLowerCase()
 
-  function handleLogout() {
-    localStorage.removeItem(ACCESS_TOKEN_KEY)
-    localStorage.removeItem(REFRESH_TOKEN_KEY)
-    localStorage.removeItem(USERNAME_KEY)
-    navigate('/login')
+  if (role === 'doctor') {
+    return <Navigate to="/dashboard/doctor" replace />
   }
 
+  return <Navigate to="/dashboard/patient" replace />
   return (
     <div className="app-shell">
       <Navbar />

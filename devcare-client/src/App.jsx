@@ -2,7 +2,9 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import ProtectedRoute from './components/ProtectedRoute'
 import DashboardPage from './pages/DashboardPage'
+import DoctorDashboardPage from './pages/DoctorDashboardPage'
 import LandingPage from './pages/LandingPage'
+import PatientDashboardPage from './pages/PatientDashboardPage'
 
 function App() {
   return (
@@ -13,6 +15,22 @@ function App() {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/doctor"
+        element={
+          <ProtectedRoute allowedRoles={['doctor']}>
+            <DoctorDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/patient"
+        element={
+          <ProtectedRoute allowedRoles={['patient']}>
+            <PatientDashboardPage />
           </ProtectedRoute>
         }
       />
