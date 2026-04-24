@@ -128,6 +128,11 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',
 ]
 
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https?://localhost(:\d+)?$',
+    r'^https?://127\.0\.0\.1(:\d+)?$',
+]
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
