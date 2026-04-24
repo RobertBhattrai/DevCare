@@ -1,13 +1,28 @@
 import { Link, NavLink } from 'react-router-dom'
 
-const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Login', href: '/login' },
-  { label: 'Register', href: '/register' },
-  { label: 'Dashboard', href: '/dashboard' },
-]
+const ACCESS_TOKEN_KEY = 'devcare_access_token'
+
+function getIsAuthenticated() {
+  return Boolean(localStorage.getItem(ACCESS_TOKEN_KEY))
+}
 
 function Navbar() {
+  const isAuthenticated = getIsAuthenticated()
+
+  const handleLogout = () => {
+    localStorage.removeItem(ACCESS_TOKEN_KEY)
+    localStorage.removeItem('devcare_refresh_token')
+    localStorage.removeItem('devcare_username')
+    window.location.href = '/'
+  }
+
+  const navItems = isAuthenticated
+    ? [
+        { label: 'Home', href: '/' },
+        { label: 'Dashboard', href: '/dashboard' },
+      ]
+    : [{ label: 'Home', href: '/' }]
+
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[rgba(242,250,248,0.9)] backdrop-blur">
       <nav className="site-container flex h-16 items-center justify-between">
@@ -30,9 +45,15 @@ function Navbar() {
           ))}
         </ul>
 
-        <Link to="/register" className="btn-primary">
-          Request Demo
-        </Link>
+        {isAuthenticated ? (
+          <button onClick={handleLogout} className="btn-secondary">
+            Logout
+          </button>
+        ) : (
+          <Link to="/" className="btn-primary">
+            Get Started
+          </Link>
+        )}
       </nav>
     </header>
   )
