@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 
 const ACCESS_TOKEN_KEY = 'devcare_access_token'
+const ROLE_KEY = 'devcare_role'
 
 function getIsAuthenticated() {
   return Boolean(localStorage.getItem(ACCESS_TOKEN_KEY))
@@ -8,17 +9,19 @@ function getIsAuthenticated() {
 
 function Navbar() {
   const isAuthenticated = getIsAuthenticated()
+  const role = localStorage.getItem(ROLE_KEY)
 
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem('devcare_refresh_token')
     localStorage.removeItem('devcare_username')
+    localStorage.removeItem(ROLE_KEY)
     window.location.href = '/'
   }
 
   const navItems = isAuthenticated
     ? [
-        { label: 'Doctor', href: '/doc' },
+        { label: role === 'doctor' ? 'Doctor' : 'Patient', href: '/' },
         { label: 'Dashboard', href: '/dashboard' },
       ]
     : []

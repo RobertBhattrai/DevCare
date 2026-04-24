@@ -6,10 +6,12 @@ import Navbar from '../components/Navbar'
 const ACCESS_TOKEN_KEY = 'devcare_access_token'
 const REFRESH_TOKEN_KEY = 'devcare_refresh_token'
 const USERNAME_KEY = 'devcare_username'
+const ROLE_KEY = 'devcare_role'
 
 function DashboardPage() {
   const navigate = useNavigate()
   const username = localStorage.getItem(USERNAME_KEY)
+  const role = localStorage.getItem(ROLE_KEY)
   const access = localStorage.getItem(ACCESS_TOKEN_KEY)
   const refresh = localStorage.getItem(REFRESH_TOKEN_KEY)
 
@@ -17,7 +19,8 @@ function DashboardPage() {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     localStorage.removeItem(USERNAME_KEY)
-    navigate('/login')
+    localStorage.removeItem(ROLE_KEY)
+    navigate('/')
   }
 
   return (
@@ -35,6 +38,9 @@ function DashboardPage() {
                 <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
                   Welcome back, {username || 'User'}
                 </h1>
+                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-primary)]">
+                  Role: {role || 'patient'}
+                </p>
                 <p className="mt-4 max-w-2xl text-base text-[var(--color-text-muted)] sm:text-lg">
                   This page shows a basic authenticated state for your hackathon
                   demo. Replace these summary cards with real patient or model
@@ -91,11 +97,8 @@ function DashboardPage() {
                 a new account.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <Link to="/login" className="btn-primary">
-                  Login
-                </Link>
-                <Link to="/register" className="btn-secondary">
-                  Register
+                <Link to="/" className="btn-primary">
+                  Go to landing
                 </Link>
               </div>
             </div>

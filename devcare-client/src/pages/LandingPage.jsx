@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import AuthSection from "../components/AuthSection";
 import FeaturesSection from "../components/FeaturesSection";
-import Footer from "../components/Footer";
 import HeroSection from "../components/HeroSection";
 import HowItWorksSection from "../components/HowItWorksSection";
 import Navbar from "../components/Navbar";
@@ -11,12 +10,14 @@ import Navbar from "../components/Navbar";
 const ACCESS_TOKEN_KEY = "devcare_access_token";
 const REFRESH_TOKEN_KEY = "devcare_refresh_token";
 const USERNAME_KEY = "devcare_username";
+const ROLE_KEY = "devcare_role";
 
 function getStoredAuth() {
     return {
         access: localStorage.getItem(ACCESS_TOKEN_KEY),
         refresh: localStorage.getItem(REFRESH_TOKEN_KEY),
         username: localStorage.getItem(USERNAME_KEY),
+        role: localStorage.getItem(ROLE_KEY),
     };
 }
 
@@ -25,15 +26,16 @@ function LandingPage() {
     const isAuthenticated = Boolean(auth.access);
     const navigate = useNavigate();
 
-    function storeAuth(access, refresh, username) {
+    function storeAuth(access, refresh, username, role) {
         localStorage.setItem(ACCESS_TOKEN_KEY, access);
         localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
         localStorage.setItem(USERNAME_KEY, username);
-        setAuth({ access, refresh, username });
+        localStorage.setItem(ROLE_KEY, role || "patient");
+        setAuth({ access, refresh, username, role: role || "patient" });
     }
 
-    const handleAuthSuccess = (access, refresh, username) => {
-        storeAuth(access, refresh, username);
+    const handleAuthSuccess = (access, refresh, username, role) => {
+        storeAuth(access, refresh, username, role);
         setTimeout(() => navigate("/dashboard"), 600);
     };
 
