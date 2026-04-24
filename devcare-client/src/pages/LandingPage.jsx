@@ -46,9 +46,15 @@ function LandingPage() {
             <Navbar/>
 
             <>
-                <HeroSection />
-                <FeaturesSection />
-                <HowItWorksSection />
+                <section id="home">
+                    <HeroSection />
+                </section>
+                <section id="features">
+                    <FeaturesSection />
+                </section>
+                <section id="how-it-works">
+                    <HowItWorksSection />
+                </section>
                 <section className="site-container pb-20" id="auth">
                     <AuthSection onAuthSuccess={handleAuthSuccess} />
                 </section>
