@@ -1,4 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
 
 const ACCESS_TOKEN_KEY = 'devcare_access_token'
 
@@ -6,8 +7,12 @@ function getIsAuthenticated() {
   return Boolean(localStorage.getItem(ACCESS_TOKEN_KEY))
 }
 
+
 function Navbar() {
   const isAuthenticated = getIsAuthenticated()
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+  const username = localStorage.getItem('devcare_username')
 
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
@@ -16,9 +21,25 @@ function Navbar() {
     window.location.href = '/'
   }
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false)
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [dropdownOpen])
+
     const navItems = isAuthenticated
       ? [
-          { label: 'Home', href: '/' },
           { label: 'Dashboard', href: '/dashboard' },
         ]
       : [
@@ -56,9 +77,30 @@ function Navbar() {
         </ul>
 
           {isAuthenticated ? (
-            <button onClick={handleLogout} className="btn-secondary">
-              Logout
-            </button>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className="flex items-center gap-2 focus:outline-none"
+                onClick={() => setDropdownOpen((open) => !open)}
+              >
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  alt="Profile"
+                  className="w-9 h-9 rounded-full border-2 border-[var(--color-primary)] bg-white"
+                />
+                <span className="font-semibold text-base hidden sm:inline">{username || 'User'}</span>
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 rounded-lg shadow-lg bg-white border border-[var(--color-border)] z-50">
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-[var(--color-danger)] hover:bg-[var(--color-surface-soft)] rounded-lg"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <a href="#auth" className="btn-primary">
               Get Started
