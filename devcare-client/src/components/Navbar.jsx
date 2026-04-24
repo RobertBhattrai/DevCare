@@ -18,7 +18,7 @@ function Navbar() {
 
   const navItems = isAuthenticated
     ? [
-        { label: 'Home', href: '/' },
+        { label: 'Doctor', href: '/doc' },
         { label: 'Dashboard', href: '/dashboard' },
       ]
     : []
