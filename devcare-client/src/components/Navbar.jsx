@@ -16,12 +16,16 @@ function Navbar() {
     window.location.href = '/'
   }
 
-  const navItems = isAuthenticated
-    ? [
-        { label: 'Doctor', href: '/doc' },
-        { label: 'Dashboard', href: '/dashboard' },
-      ]
-    : []
+    const navItems = isAuthenticated
+      ? [
+          { label: 'Home', href: '/' },
+          { label: 'Dashboard', href: '/dashboard' },
+        ]
+      : [
+          { label: 'Home', href: '#home', anchor: true },
+          { label: 'How it works', href: '#how-it-works', anchor: true },
+          { label: 'Features', href: '#features', anchor: true },
+        ]
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[rgba(242,250,248,0.9)] backdrop-blur">
@@ -33,27 +37,33 @@ function Navbar() {
         <ul className="hidden items-center gap-8 md:flex">
           {navItems.map((item) => (
             <li key={item.label}>
-              <NavLink
-                to={item.href}
-                className={({ isActive }) =>
-                  isActive ? 'nav-link nav-link-active' : 'nav-link'
-                }
-              >
-                {item.label}
-              </NavLink>
+              {item.anchor ? (
+                <a href={item.href} className="nav-link">
+                  {item.label}
+                </a>
+              ) : (
+                <NavLink
+                  to={item.href}
+                  className={({ isActive }) =>
+                    isActive ? 'nav-link nav-link-active' : 'nav-link'
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              )}
             </li>
           ))}
         </ul>
 
-        {isAuthenticated ? (
-          <button onClick={handleLogout} className="btn-secondary">
-            Logout
-          </button>
-        ) : (
-          <a href="#contact" className="btn-primary">
-            Get Started
-          </a>
-        )}
+          {isAuthenticated ? (
+            <button onClick={handleLogout} className="btn-secondary">
+              Logout
+            </button>
+          ) : (
+            <a href="#auth" className="btn-primary">
+              Get Started
+            </a>
+          )}
       </nav>
     </header>
   )
