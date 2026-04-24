@@ -21,7 +21,7 @@ function Navbar() {
         { label: 'Home', href: '/' },
         { label: 'Dashboard', href: '/dashboard' },
       ]
-    : [{ label: 'Home', href: '/' }]
+    : []
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[rgba(242,250,248,0.9)] backdrop-blur">
@@ -50,9 +50,9 @@ function Navbar() {
             Logout
           </button>
         ) : (
-          <Link to="/" className="btn-primary">
+          <a href="#contact" className="btn-primary">
             Get Started
-          </Link>
+          </a>
         )}
       </nav>
     </header>

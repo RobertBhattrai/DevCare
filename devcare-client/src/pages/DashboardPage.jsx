@@ -72,14 +72,9 @@ function DashboardPage() {
                   <p className="text-sm font-semibold text-[var(--color-text-muted)]">
                     Quick links
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <Link to="/login" className="btn-secondary">
-                      Login
-                    </Link>
-                    <Link to="/register" className="btn-secondary">
-                      Register
-                    </Link>
-                  </div>
+                  <h1>
+                    History
+                  </h1>
                 </div>
               </div>
             </div>

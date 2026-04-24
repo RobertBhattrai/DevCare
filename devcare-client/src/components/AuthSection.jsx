@@ -110,8 +110,24 @@ function AuthSection({ onAuthSuccess }) {
         </article>
 
         <article className="elevated-card rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8">
+          <div className="mb-5 flex items-center gap-2 rounded-full bg-[var(--color-surface-soft)] p-1">
+            <button
+              type="button"
+              className={`auth-tab ${mode === 'login' ? 'auth-tab-active' : ''}`}
+              onClick={() => switchMode('login')}
+            >
+              Login
+            </button>
+            <button
+              type="button"
+              className={`auth-tab ${mode === 'register' ? 'auth-tab-active' : ''}`}
+              onClick={() => switchMode('register')}
+            >
+              Register
+            </button>
+          </div>
 
-              <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
                 <label className="auth-label" htmlFor="username">
                   Username
                 </label>
