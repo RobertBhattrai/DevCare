@@ -21,10 +21,11 @@ function AuthSection({ onAuthSuccess }) {
   })
 
   function storeAuth(access, refresh, username, role) {
+    const normalizedRole = (role || 'patient').toLowerCase()
     localStorage.setItem(ACCESS_TOKEN_KEY, access)
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
     localStorage.setItem(USERNAME_KEY, username)
-    localStorage.setItem(ROLE_KEY, role || 'patient')
+    localStorage.setItem(ROLE_KEY, normalizedRole)
   }
 
   function updateField(event) {
@@ -43,7 +44,7 @@ function AuthSection({ onAuthSuccess }) {
         const registerData = await registerUser({
           username: form.username,
           email: form.email,
-          role: form.role,
+          role: form.role.toLowerCase(),
           password: form.password,
           password_confirm: form.confirmPassword,
         })

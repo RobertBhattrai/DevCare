@@ -21,8 +21,10 @@ function Navbar() {
 
   const navItems = isAuthenticated
     ? [
-        { label: role === 'doctor' ? 'Doctor' : 'Patient', href: '/' },
-        { label: 'Dashboard', href: '/dashboard' },
+        {
+          label: role === 'doctor' ? 'Doctor Dashboard' : 'Patient Dashboard',
+          href: role === 'doctor' ? '/dashboard/doctor' : '/dashboard/patient',
+        },
       ]
     : []
 

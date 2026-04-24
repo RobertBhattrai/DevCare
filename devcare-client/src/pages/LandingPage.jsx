@@ -35,8 +35,10 @@ function LandingPage() {
     }
 
     const handleAuthSuccess = (access, refresh, username, role) => {
-        storeAuth(access, refresh, username, role);
-        setTimeout(() => navigate("/dashboard"), 600);
+        const normalizedRole = (role || "patient").toLowerCase();
+        storeAuth(access, refresh, username, normalizedRole);
+        const dashboardPath = normalizedRole === "doctor" ? "/dashboard/doctor" : "/dashboard/patient";
+        setTimeout(() => navigate(dashboardPath), 600);
     };
 
     return (

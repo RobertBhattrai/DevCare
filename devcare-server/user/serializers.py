@@ -8,12 +8,7 @@ from .models import UserProfile
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
     password_confirm = serializers.CharField(write_only=True)
-    role = serializers.ChoiceField(
-        choices=UserProfile.ROLE_CHOICES,
-        write_only=True,
-        required=False,
-        default=UserProfile.ROLE_PATIENT,
-    )
+    role = serializers.CharField(write_only=True, required=False, default=UserProfile.ROLE_PATIENT)
 
     class Meta:
         model = User
@@ -37,6 +32,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'email': 'Email is already in use.'})
 
         return attrs
+
+    def validate_role(self, value):
+        normalized = str(value).lower().strip()
+        allowed_roles = {choice[0] for choice in UserProfile.ROLE_CHOICES}
+        if normalized not in allowed_roles:
+            raise serializers.ValidationError('Role must be patient or doctor.')
+        return normalized
 
     def create(self, validated_data):
         validated_data.pop('password_confirm')
