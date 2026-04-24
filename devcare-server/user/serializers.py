@@ -1,10 +1,19 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from .models import UserProfile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
     password_confirm = serializers.CharField(write_only=True)
+    role = serializers.ChoiceField(
+        choices=UserProfile.ROLE_CHOICES,
+        write_only=True,
+        required=False,
+        default=UserProfile.ROLE_PATIENT,
+    )
 
     class Meta:
         model = User
@@ -13,6 +22,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'password_confirm',
+            'role',
             'first_name',
             'last_name',
         ]
@@ -30,8 +40,27 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password_confirm')
+        role = validated_data.pop('role')
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
         user.save()
+        UserProfile.objects.create(user=user, role=role)
         return user
+
+
+class RoleTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        profile, _ = UserProfile.objects.get_or_create(
+            user=self.user,
+            defaults={'role': UserProfile.ROLE_PATIENT},
+        )
+
+        data['user'] = {
+            'id': self.user.id,
+            'username': self.user.username,
+            'email': self.user.email,
+            'role': profile.role,
+        }
+        return data
