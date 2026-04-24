@@ -24,14 +24,7 @@ function Navbar() {
     window.location.href = '/'
   }
 
-  const navItems = isAuthenticated
-    ? [
-        {
-          label: role === 'doctor' ? 'Doctor Dashboard' : 'Patient Dashboard',
-          href: role === 'doctor' ? '/dashboard/doctor' : '/dashboard/patient',
-        },
-      ]
-    : []
+  // navItems declaration moved below for clarity
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event) {
@@ -49,15 +42,18 @@ function Navbar() {
     }
   }, [dropdownOpen])
 
-    const navItems = isAuthenticated
-      ? [
-          { label: 'Dashboard', href: '/dashboard' },
-        ]
-      : [
-          { label: 'Home', href: '#home', anchor: true },
-          { label: 'How it works', href: '#how-it-works', anchor: true },
-          { label: 'Features', href: '#features', anchor: true },
-        ]
+  const navItems = isAuthenticated
+    ? [
+        {
+          label: role === 'doctor' ? 'Doctor Dashboard' : 'Dashboard',
+          href: role === 'doctor' ? '/dashboard/doctor' : '/dashboard',
+        },
+      ]
+    : [
+        { label: 'Home', href: '#home', anchor: true },
+        { label: 'How it works', href: '#how-it-works', anchor: true },
+        { label: 'Features', href: '#features', anchor: true },
+      ]
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[rgba(242,250,248,0.9)] backdrop-blur">
