@@ -6,12 +6,14 @@ import { loginUser, registerUser } from '../api/authApi'
 const ACCESS_TOKEN_KEY = 'devcare_access_token'
 const REFRESH_TOKEN_KEY = 'devcare_refresh_token'
 const USERNAME_KEY = 'devcare_username'
+const ROLE_KEY = 'devcare_role'
 
 const initialFormState = {
   username: '',
   email: '',
   password: '',
   confirmPassword: '',
+  role: 'patient',
 }
 
 function AuthForm({ mode }) {
@@ -25,10 +27,11 @@ function AuthForm({ mode }) {
     const { name, value } = event.target
     setForm((prev) => ({ ...prev, [name]: value }))
   }
-
-  function saveAuth(access, refresh, username) {
+, role) {
     localStorage.setItem(ACCESS_TOKEN_KEY, access)
     localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
+    localStorage.setItem(USERNAME_KEY, username)
+    localStorage.setItem(ROLE_KEY, rolfresh)
     localStorage.setItem(USERNAME_KEY, username)
   }
 
@@ -44,12 +47,14 @@ function AuthForm({ mode }) {
           username: form.username,
           email: form.email,
           password: form.password,
-          password_confirm: form.confirmPassword,
+          role: form.role,
         })
 
         saveAuth(
           registerData.access,
           registerData.refresh,
+          registerData.user.username,
+          registerData.user.rol
           registerData.user.username
         )
         setSuccess('Registration successful. Redirecting to dashboard...')
@@ -59,6 +64,11 @@ function AuthForm({ mode }) {
           username: form.username,
           password: form.password,
         })
+          loginData.access,
+          loginData.refresh,
+          loginData.user.username,
+          loginData.user.role
+        
 
         saveAuth(loginData.access, loginData.refresh, form.username)
         setSuccess('Login successful. Redirecting to dashboard...')
@@ -133,6 +143,25 @@ function AuthForm({ mode }) {
                   value={form.email}
                   onChange={updateField}
                   className="auth-input"
+            {isRegister && (
+              <div>
+                <label className="auth-label" htmlFor="role">
+                  Role
+                </label>
+                <select
+                  id="role"
+                  name="role"
+                  value={form.role}
+                  onChange={updateField}
+                  className="auth-input bg-transparent"
+                  required
+                >
+                  <option value="patient">Patient</option>
+                  <option value="doctor">Doctor</option>
+                </select>
+              </div>
+            )}
+
                   placeholder="name@example.com"
                   autoComplete="email"
                   required

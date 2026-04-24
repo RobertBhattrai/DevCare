@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
@@ -45,9 +45,14 @@ function DoctorDashboardPage() {
               <p className="text-sm font-semibold text-[var(--color-text-muted)]">Critical Cases</p>
               <p className="mt-2 text-2xl font-bold">3</p>
             </div>
-            <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-soft)] p-5">
-              <p className="text-sm font-semibold text-[var(--color-text-muted)]">Pending Reports</p>
-              <p className="mt-2 text-2xl font-bold">7</p>
+            <div className="flex flex-col justify-between rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-soft)] p-5">
+              <div>
+                <p className="text-sm font-semibold text-[var(--color-text-muted)]">Consultations</p>
+                <p className="mt-2 text-xl font-bold">Patient Messages</p>
+              </div>
+              <Link to="/chat" className="mt-4 text-sm font-semibold text-[var(--color-primary)] hover:underline">
+                Accept Chats &rarr;
+              </Link>
             </div>
           </div>
 
