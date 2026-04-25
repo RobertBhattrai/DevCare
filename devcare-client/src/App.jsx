@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage'
 import DoctorDashboardPage from './pages/DoctorDashboardPage'
 import LandingPage from './pages/LandingPage'
 import PatientDashboardPage from './pages/PatientDashboardPage'
+import StartSession from './pages/StartSession'
 
 function App() {
   return (
@@ -31,6 +32,14 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={['patient']}>
             <PatientDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/session/start"
+        element={
+          <ProtectedRoute allowedRoles={['patient']}>
+            <StartSession />
           </ProtectedRoute>
         }
       />

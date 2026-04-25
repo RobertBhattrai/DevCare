@@ -52,6 +52,13 @@ function PatientDashboardPage() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={() => navigate('/session/start')}
+            >
+              Start Rehab Session
+            </button>
             <button type="button" className="btn-primary" onClick={handleLogout}>
               Logout
             </button>

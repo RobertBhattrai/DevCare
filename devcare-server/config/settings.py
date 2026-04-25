@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'user.apps.UserConfig',
+    'ai_module.apps.AiModuleConfig',
+    'rehab.apps.RehabConfig',
 ]
 
 MIDDLEWARE = [

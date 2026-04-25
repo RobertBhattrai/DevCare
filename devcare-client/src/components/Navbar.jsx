@@ -11,7 +11,7 @@ function getIsAuthenticated() {
 
 function Navbar() {
   const isAuthenticated = getIsAuthenticated()
-  const role = localStorage.getItem(ROLE_KEY)
+  const role = (localStorage.getItem(ROLE_KEY) || 'patient').toLowerCase()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
   const username = localStorage.getItem('devcare_username')
@@ -30,8 +30,20 @@ function Navbar() {
           label: role === 'doctor' ? 'Doctor Dashboard' : 'Patient Dashboard',
           href: role === 'doctor' ? '/dashboard/doctor' : '/dashboard/patient',
         },
+        ...(role === 'patient'
+          ? [
+              {
+                label: 'Start Session',
+                href: '/session/start',
+              },
+            ]
+          : []),
       ]
-    : []
+    : [
+        { label: 'Home', href: '#home', anchor: true },
+        { label: 'How it works', href: '#how-it-works', anchor: true },
+        { label: 'Features', href: '#features', anchor: true },
+      ]
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event) {
@@ -48,16 +60,6 @@ function Navbar() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [dropdownOpen])
-
-    const navItems = isAuthenticated
-      ? [
-          { label: 'Dashboard', href: '/dashboard' },
-        ]
-      : [
-          { label: 'Home', href: '#home', anchor: true },
-          { label: 'How it works', href: '#how-it-works', anchor: true },
-          { label: 'Features', href: '#features', anchor: true },
-        ]
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[rgba(242,250,248,0.9)] backdrop-blur">
